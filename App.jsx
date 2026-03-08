@@ -281,85 +281,86 @@ export default function App() {
     }}>
       {/* Header */}
       <div style={{
-        background: "linear-gradient(180deg, #0d1117 0%, #0a0a0f 100%)",
+        background: "rgba(13, 17, 23, 0.95)",
         borderBottom: "1px solid #1a1a2e",
-        padding: "32px 24px 24px",
-        textAlign: "center",
+        padding: "10px 20px",
         position: "sticky",
         top: 0,
         zIndex: 100,
         backdropFilter: "blur(12px)",
       }}>
-        <div style={{ fontSize: 11, letterSpacing: 6, color: "#4a90d9", marginBottom: 6 }}>
-          ✦ DISNEY+ ✦ ESSENTIAL WATCH GUIDE ✦
-        </div>
-        <h1 style={{
-          fontSize: "clamp(20px, 5vw, 32px)",
-          fontWeight: 900,
-          letterSpacing: 3,
-          margin: "0 0 4px",
-          color: "#fff",
-          textTransform: "uppercase",
-        }}>
-          Star Wars: The Clone Wars
-        </h1>
-        <div style={{ fontSize: 13, color: "#888", letterSpacing: 2, marginBottom: 16 }}>
-          No-Filler Episode Checklist
-        </div>
-
-        <a
-          href="https://www.disneyplus.com/browse/entity-314f14b4-b70a-4ec6-b634-2559f0b1f77e"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            background: "#0063e5",
-            color: "#fff",
-            fontSize: 12,
-            fontFamily: "'Courier New', monospace",
-            fontWeight: 700,
-            letterSpacing: 1,
-            padding: "6px 14px",
-            borderRadius: 4,
-            textDecoration: "none",
-            marginBottom: 20,
-            transition: "background 0.15s",
-          }}
-          onMouseEnter={e => e.currentTarget.style.background = "#0050b8"}
-          onMouseLeave={e => e.currentTarget.style.background = "#0063e5"}
-        >
-          ▶ WATCH ON DISNEY+
-        </a>
-
-        {/* Progress */}
-        <div style={{ maxWidth: 480, margin: "0 auto" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#888", marginBottom: 6 }}>
-            <span>{watchedEps} / {totalEps} episodes watched</span>
-            <span style={{ color: pct === 100 ? "#27ae60" : "#4a90d9" }}>{pct}%</span>
-          </div>
-          <div style={{ background: "#1a1a2e", borderRadius: 4, height: 6, overflow: "hidden" }}>
-            <div style={{
-              height: "100%",
-              width: `${pct}%`,
-              background: pct === 100
-                ? "linear-gradient(90deg, #27ae60, #2ecc71)"
-                : "linear-gradient(90deg, #4a90d9, #a855f7)",
-              borderRadius: 4,
-              transition: "width 0.4s ease",
-            }} />
-          </div>
-        </div>
-
-        {/* Legend */}
-        <div style={{ display: "flex", gap: 16, justifyContent: "center", marginTop: 16, flexWrap: "wrap" }}>
-          {Object.entries(tagColors).map(([tag, c]) => (
-            <div key={tag} style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11 }}>
-              <div style={{ width: 10, height: 10, borderRadius: 2, background: c.bg }} />
-              <span style={{ color: "#aaa", letterSpacing: 1 }}>{tag}</span>
+        <div style={{ maxWidth: 720, margin: "0 auto" }}>
+          {/* Top row: title + Disney+ button */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, marginBottom: 8 }}>
+            <div>
+              <div style={{
+                fontSize: "clamp(13px, 2.5vw, 18px)",
+                fontWeight: 900,
+                letterSpacing: 2,
+                color: "#fff",
+                textTransform: "uppercase",
+                lineHeight: 1.2,
+              }}>
+                Star Wars: The Clone Wars
+              </div>
+              <div style={{ fontSize: 10, color: "#555", letterSpacing: 1, marginTop: 2 }}>
+                No-Filler Episode Checklist
+              </div>
             </div>
-          ))}
+            <a
+              href="https://www.disneyplus.com/browse/entity-314f14b4-b70a-4ec6-b634-2559f0b1f77e"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 5,
+                background: "#0063e5",
+                color: "#fff",
+                fontSize: 10,
+                fontFamily: "'Courier New', monospace",
+                fontWeight: 700,
+                letterSpacing: 1,
+                padding: "5px 10px",
+                borderRadius: 4,
+                textDecoration: "none",
+                whiteSpace: "nowrap",
+                flexShrink: 0,
+                transition: "background 0.15s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = "#0050b8"}
+              onMouseLeave={e => e.currentTarget.style.background = "#0063e5"}
+            >
+              ▶ DISNEY+
+            </a>
+          </div>
+
+          {/* Bottom row: progress bar + stats + legend */}
+          <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+            <div style={{ flex: 1, minWidth: 80, background: "#1a1a2e", borderRadius: 4, height: 4, overflow: "hidden" }}>
+              <div style={{
+                height: "100%",
+                width: `${pct}%`,
+                background: pct === 100
+                  ? "linear-gradient(90deg, #27ae60, #2ecc71)"
+                  : "linear-gradient(90deg, #4a90d9, #a855f7)",
+                borderRadius: 4,
+                transition: "width 0.4s ease",
+              }} />
+            </div>
+            <span style={{ fontSize: 10, color: "#555", whiteSpace: "nowrap" }}>
+              {watchedEps}/{totalEps}
+              <span style={{ color: pct === 100 ? "#27ae60" : "#4a90d9", marginLeft: 4 }}>{pct}%</span>
+            </span>
+            <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+              {Object.entries(tagColors).map(([tag, c]) => (
+                <div key={tag} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9 }}>
+                  <div style={{ width: 8, height: 8, borderRadius: 2, background: c.bg, flexShrink: 0 }} />
+                  <span style={{ color: "#555", letterSpacing: 0.5 }}>{tag}</span>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
 
