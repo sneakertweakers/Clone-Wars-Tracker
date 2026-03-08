@@ -1,7 +1,4 @@
-import { useState, useEffect, useRef } from "react";
-
-// 🎵 Music: drop a `music.mp3` in the `public/` folder to enable background audio.
-// A royalty-free Star Wars-inspired track works great here.
+import { useState, useEffect } from "react";
 
 const episodeDescriptions = {
   "S1E5 – Rookies": "🪖 Rookie clones defend Rishi Station alone against a full droid takeover.",
@@ -413,11 +410,6 @@ const tagColors = {
   OPTIONAL: { bg: "#555", text: "#ccc" },
 };
 
-const tagEmojis = {
-  ESSENTIAL: "🔴",
-  RECOMMENDED: "🟡",
-  OPTIONAL: "⚪",
-};
 
 const STORAGE_KEY = "clonewars-checklist-v1";
 const THEME_KEY = "clonewars-theme-v1";
@@ -439,8 +431,6 @@ export default function App() {
 
   const [collapsed, setCollapsed] = useState({});
   const [themeKey, setThemeKey] = useState(() => localStorage.getItem(THEME_KEY) || "dark");
-  const [muted, setMuted] = useState(true);
-  const audioRef = useRef(null);
 
   const theme = THEMES[themeKey];
 
@@ -451,16 +441,6 @@ export default function App() {
   useEffect(() => {
     try { localStorage.setItem(THEME_KEY, themeKey); } catch {}
   }, [themeKey]);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    if (muted) {
-      audio.pause();
-    } else {
-      audio.play().catch(() => {});
-    }
-  }, [muted]);
 
   const toggle = (id) => setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
   const toggleSeason = (season) => setCollapsed((prev) => ({ ...prev, [season]: !prev[season] }));
@@ -494,9 +474,6 @@ export default function App() {
       padding: "0 0 60px",
       transition: "background 0.3s, color 0.3s",
     }}>
-      {/* 🎵 Background music — drop music.mp3 in /public to enable */}
-      <audio ref={audioRef} loop src="/music.mp3" />
-
       {/* Header */}
       <div style={{
         background: theme.headerBg,
@@ -527,17 +504,8 @@ export default function App() {
               </div>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexShrink: 0, flexWrap: "wrap" }}>
-              {/* Theme button */}
               <button onClick={cycleTheme} style={btnBase} title="Change theme">
                 {theme.label}
-              </button>
-              {/* Mute button */}
-              <button
-                onClick={() => setMuted((m) => !m)}
-                style={{ ...btnBase, color: muted ? theme.muted : theme.accent }}
-                title={muted ? "Play music 🎵" : "Mute music 🔇"}
-              >
-                {muted ? "🔇 MUSIC" : "🎵 MUSIC"}
               </button>
               {/* Disney+ link */}
               <a
@@ -589,9 +557,9 @@ export default function App() {
             </span>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {Object.entries(tagColors).map(([tag, c]) => (
-                <div key={tag} style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 9 }}>
+                <div key={tag} style={{ display: "flex", alignItems: "center", gap: 4, fontSize: 9 }}>
                   <div style={{ width: 7, height: 7, borderRadius: 2, background: c.bg, flexShrink: 0 }} />
-                  <span style={{ color: theme.muted, letterSpacing: 0.5 }}>{tagEmojis[tag]} {tag}</span>
+                  <span style={{ color: theme.muted, letterSpacing: 0.5 }}>{tag}</span>
                 </div>
               ))}
             </div>
@@ -672,43 +640,32 @@ export default function App() {
                     transition: "all 0.2s",
                   }}>
                     {/* Arc header */}
-                    <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 10 }}>
-                      {/* Emoji badge */}
-                      <div style={{
-                        fontSize: 32,
-                        lineHeight: 1,
-                        flexShrink: 0,
-                        filter: arcDone ? "grayscale(0)" : "grayscale(0.3)",
-                        transition: "filter 0.3s",
-                      }}>
-                        {arcDone ? "✅" : emoji}
+                    <div style={{ marginBottom: 10 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 5 }}>
+                        <span style={{ fontSize: 18, lineHeight: 1 }}>{arcDone ? "✅" : emoji}</span>
+                        <span style={{
+                          fontWeight: 700,
+                          fontSize: 14,
+                          color: arcDone ? theme.accentDone : theme.text,
+                          letterSpacing: 0.5,
+                        }}>
+                          {arc.name}
+                        </span>
+                        <span style={{
+                          fontSize: 9,
+                          fontWeight: 700,
+                          letterSpacing: 1.5,
+                          padding: "2px 7px",
+                          borderRadius: 3,
+                          background: tagStyle.bg,
+                          color: tagStyle.text,
+                        }}>
+                          {arc.tag}
+                        </span>
                       </div>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", marginBottom: 4 }}>
-                          <span style={{
-                            fontWeight: 700,
-                            fontSize: 14,
-                            color: arcDone ? theme.accentDone : theme.text,
-                            letterSpacing: 0.5,
-                          }}>
-                            {arc.name}
-                          </span>
-                          <span style={{
-                            fontSize: 9,
-                            fontWeight: 700,
-                            letterSpacing: 1.5,
-                            padding: "2px 7px",
-                            borderRadius: 3,
-                            background: tagStyle.bg,
-                            color: tagStyle.text,
-                          }}>
-                            {tagEmojis[arc.tag]} {arc.tag}
-                          </span>
-                        </div>
-                        <p style={{ fontSize: 11, color: theme.sub, margin: 0, lineHeight: 1.6 }}>
-                          {arc.note}
-                        </p>
-                      </div>
+                      <p style={{ fontSize: 12, color: theme.sub, margin: 0, lineHeight: 1.6 }}>
+                        {arc.note}
+                      </p>
                     </div>
 
                     {/* Episodes */}
@@ -761,12 +718,11 @@ export default function App() {
                               </div>
                               {desc && (
                                 <div style={{
-                                  fontSize: 11,
+                                  fontSize: 12,
                                   color: isDone ? theme.muted : theme.sub,
-                                  marginTop: 2,
-                                  lineHeight: 1.4,
-                                  fontStyle: "italic",
-                                  opacity: isDone ? 0.6 : 1,
+                                  marginTop: 3,
+                                  lineHeight: 1.5,
+                                  opacity: isDone ? 0.5 : 1,
                                 }}>
                                   {desc}
                                 </div>
@@ -792,7 +748,6 @@ export default function App() {
         }}>
           <p>⚡ <strong style={{ color: theme.sub }}>Pro tip:</strong> Season 7 Siege of Mandalore runs simultaneously with Revenge of the Sith. Watch them intercut or back-to-back for maximum impact.</p>
           <p>🎬 After finishing Clone Wars, consider watching <strong style={{ color: theme.sub }}>Star Wars Rebels</strong> — many characters and plot threads continue there.</p>
-          <p>🎵 <strong style={{ color: theme.sub }}>Music:</strong> Drop a <code style={{ color: theme.accent }}>music.mp3</code> in the <code style={{ color: theme.accent }}>public/</code> folder and hit the 🔇 button above to enable background music!</p>
         </div>
       </div>
     </div>
