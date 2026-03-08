@@ -303,9 +303,35 @@ export default function App() {
         }}>
           Star Wars: The Clone Wars
         </h1>
-        <div style={{ fontSize: 13, color: "#888", letterSpacing: 2, marginBottom: 20 }}>
+        <div style={{ fontSize: 13, color: "#888", letterSpacing: 2, marginBottom: 16 }}>
           No-Filler Episode Checklist
         </div>
+
+        <a
+          href="https://www.disneyplus.com/browse/entity-314f14b4-b70a-4ec6-b634-2559f0b1f77e"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            background: "#0063e5",
+            color: "#fff",
+            fontSize: 12,
+            fontFamily: "'Courier New', monospace",
+            fontWeight: 700,
+            letterSpacing: 1,
+            padding: "6px 14px",
+            borderRadius: 4,
+            textDecoration: "none",
+            marginBottom: 20,
+            transition: "background 0.15s",
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = "#0050b8"}
+          onMouseLeave={e => e.currentTarget.style.background = "#0063e5"}
+        >
+          ▶ WATCH ON DISNEY+
+        </a>
 
         {/* Progress */}
         <div style={{ maxWidth: 480, margin: "0 auto" }}>
